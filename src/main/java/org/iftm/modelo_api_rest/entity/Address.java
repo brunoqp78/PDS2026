@@ -1,6 +1,7 @@
 package org.iftm.modelo_api_rest.entity;
 
 import java.io.Serializable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
