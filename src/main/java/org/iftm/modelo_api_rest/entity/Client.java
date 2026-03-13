@@ -8,6 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 
@@ -35,7 +39,13 @@ public class Client implements Serializable {
     @Column(name = "num_filhos", nullable = false)
     private Integer children;
 
+    @OneToOne
+    @JoinColumn(name="fk_endereco", referencedColumnName="id")
     private Address address;
+
+    @ManyToOne
+    @JoinColumn(name="fk_categoria", referencedColumnName="id")
+    private Category category;
 
     //anotação que indica ao JPA que o atributo não deve existir no banco de dados
     @Transient
@@ -44,14 +54,15 @@ public class Client implements Serializable {
     public Client() {
     }
     
-    public Client(Long id, String name, String cpf, Double income, Instant birthDate, Integer children) {
+    public Client(Long id, String name, String cpf, Double income, Instant birthDate, Integer children, Address address, Category category) {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
         this.income = income;
         this.birthDate = birthDate;
         this.children = children;
-        this.idade = idade;
+        this.address = address;
+        this.category = category;
     }
     
     public Long getId() {
@@ -89,6 +100,22 @@ public class Client implements Serializable {
     }
     public void setChildren(Integer children) {
         this.children = children;
+    }    
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }    
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override

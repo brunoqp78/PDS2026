@@ -11,8 +11,14 @@ public class ClientTest {
         client01.setIncome(4500.00);        
         client01.setBirthDate(Instant.parse("1980-03-15T20:15:30.00Z"));
         client01.setChildren(2);
+        Address address1 = new Address(null, "liberdade", "Uberlândia", "MG", "38400000");
+        Address address2 = new Address(null, "joao naves", "Uberlândia", "MG", "38400000");
+        Category category = new Category(null, "normal");
+        client01.setAddress(address1);
+        client01.setCategory(category);
 
-        Client client02 = new Client(null, "Maria", "22222222222", 4500.00, Instant.now(), 2);
+
+        Client client02 = new Client(null, "Maria", "22222222222", 4500.00, Instant.now(), 2, address2, category);
 
         System.out.println(" Cliente 1 criado com sucesso!");
         System.out.println("Nome: " + client01.getName());
