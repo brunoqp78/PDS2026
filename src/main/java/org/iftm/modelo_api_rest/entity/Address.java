@@ -2,6 +2,7 @@ package org.iftm.modelo_api_rest.entity;
 
 import java.io.Serializable;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,16 +10,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tb_address")
+@Table(name = "tb_endereco")
 public class Address implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "endereco", nullable = false)
     private String street;
+    @Column(name = "cidade", nullable = false, length=100)
     private String city;
+    @Column(name = "estado", nullable = false, length=25)
     private String state;
+    @Column(name = "cep", nullable = false, length=10)
     private String zipCode;
     
     private Client client;

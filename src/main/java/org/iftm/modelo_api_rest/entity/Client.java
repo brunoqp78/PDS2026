@@ -26,7 +26,7 @@ public class Client implements Serializable {
     //anotação que informa ao JPA as caracteristicas de cada campo
     @Column(name = "nome", length = 100, nullable = false)
     private String name;
-    @Column(name = "cpf", length = 14, nullable = true, unique = true)
+    @Column(name = "cpf", length = 14, nullable = false, unique = true)
     private String cpf;
     @Column(name = "salario", nullable = false)
     private Double income;
