@@ -2,6 +2,7 @@ package org.iftm.modelo_api_rest;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import org.iftm.modelo_api_rest.entities.Address;
 import org.iftm.modelo_api_rest.entities.Client;
@@ -35,7 +36,6 @@ public class ModeloApiRestApplication implements CommandLineRunner {
     @Override
     @Transactional // Mantém a conexão aberta para consultas complexas
     public void run(String... args) throws Exception {
-
         System.out.println("\n=================================================");
         System.out.println("🚀 Camada Service : TESTES DOS SERVIÇOS BÁSICOS");
         System.out.println("=================================================\n");
@@ -43,10 +43,24 @@ public class ModeloApiRestApplication implements CommandLineRunner {
         Client clienteSalvo = clientService.insert(client);
         System.out.println("O novo cliente tem ID : " + clienteSalvo.getId());
 
+        System.out.println("\nModificando o cliente cadastrado: ");
+        Long idExistente = 21L;
+        client = new Client(null, "Bruno", "11111111111", 19000.00, Instant.now(), 2);
+        Client clienteModificado = clientService.update(idExistente, client);
+        System.out.println("O novo salario do cliente é " + clienteModificado.getIncome());
+
+        //buscar o cliente cadastrado
+        System.out.println("Buscar as informações do cliente cadastrado");
+        Optional<Client> clientCadastrado = clientService.findById(idExistente);
+        if (clientCadastrado.isPresent()){
+            System.out.println("O nome do cliente cadastrado é " + clientCadastrado.get().getName());
+        }
+
         System.out.println("\nBuscando todos clientes:");
         List<Client> clientes = clientService.findAll();
         for (Client c : clientes) {
-            System.out.println(" - " + c.getName() + " (R$ " + c.getIncome() + ")");
+            System.out.println(" - " + c.getName() + " (R$ " + c.getIncome() + ")" + " - " + 
+            clientService.recommendCredit(c.getId()));
         }         
 
         System.out.println("\nBuscando todos clientes que contém da no nome:");
