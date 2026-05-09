@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.iftm.modelo_api_rest.entities.Address;
+import org.iftm.modelo_api_rest.entities.Category;
 import org.iftm.modelo_api_rest.entities.Client;
 import org.iftm.modelo_api_rest.repositories.AddressRepository;
+import org.iftm.modelo_api_rest.repositories.CategoryRepository;
 import org.iftm.modelo_api_rest.repositories.ClientRepository;
 import org.iftm.modelo_api_rest.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class ModeloApiRestApplication implements CommandLineRunner {
     private ClientRepository clientRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     //relacionado a atividade A3
     @Autowired
@@ -39,13 +43,16 @@ public class ModeloApiRestApplication implements CommandLineRunner {
         System.out.println("\n=================================================");
         System.out.println("🚀 Camada Service : TESTES DOS SERVIÇOS BÁSICOS");
         System.out.println("=================================================\n");
+        Category category = categoryRepository.findById(1L).get();
         Client client = new Client(null, "Bruno", "11111111111", 8000.00, Instant.now(), 2);
+        client.setCategory(category);
         Client clienteSalvo = clientService.insert(client);
         System.out.println("O novo cliente tem ID : " + clienteSalvo.getId());
 
         System.out.println("\nModificando o cliente cadastrado: ");
         Long idExistente = 21L;
         client = new Client(null, "Bruno", "11111111111", 19000.00, Instant.now(), 2);
+        client.setCategory(category);
         Client clienteModificado = clientService.update(idExistente, client);
         System.out.println("O novo salario do cliente é " + clienteModificado.getIncome());
 
