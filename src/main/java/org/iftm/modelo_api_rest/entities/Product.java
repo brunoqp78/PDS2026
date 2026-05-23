@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,6 +27,8 @@ public class Product implements Serializable {
     @Column(name = "preco")
     private Double price;
 
+    //não permitir o mapeamento do cliente na geração do Json
+    @JsonIgnore
     // O lado "Fraco" do Relacionamento ManyToMany 🔗
     @ManyToMany(mappedBy = "products")
     private Set<Client> clients = new HashSet<>();

@@ -2,6 +2,8 @@ package org.iftm.modelo_api_rest.entities;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,6 +30,8 @@ public class Address implements Serializable {
     @Column(name = "cep", nullable = false, length=10)
     private String zipCode;
     
+    //não permitir o mapeamento do cliente na geração do Json
+    @JsonIgnore
     @OneToOne(mappedBy="address", fetch=FetchType.LAZY)
     private Client client;
 

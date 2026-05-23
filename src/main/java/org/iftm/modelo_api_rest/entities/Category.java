@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,6 +27,8 @@ public class Category implements Serializable {
     @Column(name = "nome", nullable = false, unique=true, length=200)
     private String name;
 
+    //não permitir o mapeamento do cliente na geração do Json
+    @JsonIgnore
     @OneToMany(mappedBy="category", fetch=FetchType.LAZY)
     private List<Client> clients = new ArrayList<>();
 
