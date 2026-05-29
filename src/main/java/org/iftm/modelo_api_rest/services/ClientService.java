@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.iftm.modelo_api_rest.entities.Category;
 import org.iftm.modelo_api_rest.entities.Client;
+import org.iftm.modelo_api_rest.entities.Address;
 import org.iftm.modelo_api_rest.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,9 @@ public class ClientService {
     @Autowired // indicando ao Spring Boot a necessidade de instanciar um objeto repository
                // durante a execução
     private ClientRepository repository;
+
+    @Autowired
+    private AddressService addressService;
 
     // operações básicas
     @Transactional(readOnly = true)
@@ -48,6 +52,10 @@ public class ClientService {
 
     @Transactional
     public Client insert(Client cli) {
+        if (cli.getAddress()!=null){
+            Address newAddress = addressService.insert(cli.getAddress());
+            cli.setAddress(newAddress);
+        }
         validateIncome(cli.getIncome());
         validateChildren(cli.getChildren());
         validateCategory(cli.getCategory());
@@ -60,7 +68,7 @@ public class ClientService {
         if (client.isPresent()) {
             validateIncome(updatedClient.getIncome());
             validateChildren(updatedClient.getChildren());
-            validateCategory(updatedClient.getCategory());
+            //validateCategory(updatedClient.getCategory()); removido na criação do ClientController
             Client clientBD = client.get();
             clientBD.setIncome(updatedClient.getIncome());
             clientBD.setChildren(updatedClient.getChildren());
