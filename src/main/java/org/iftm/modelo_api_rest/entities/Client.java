@@ -76,7 +76,7 @@ public class Client implements Serializable {
     }
 
     public Client(Long id, String name, String cpf, Double income, Instant birthDate, Integer children, Address address,
-            Category category) {
+            Category category, Set<Product> products) {
         this.id = id;
         this.name = name;
         this.cpf = cpf;
@@ -85,6 +85,7 @@ public class Client implements Serializable {
         this.children = children;
         this.address = address;
         this.category = category;
+        this.products = products;
     }
 
     public Long getId() {
@@ -149,6 +150,16 @@ public class Client implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 
     @Override
