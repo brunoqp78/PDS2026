@@ -1,0 +1,186 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Informações do Usuário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #client-info {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        #client-details,
+        #client-address,
+        #client-category,
+        #client-products {
+            margin-bottom: 20px;
+            color: blue;
+        }
+
+        #client-details p,
+        #client-address p,
+        #client-category p,
+        #client-products p {
+            margin: 5px 0;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        .input-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .input-container button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .input-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="client-info">
+        <h1>Informações do Cliente</h1>
+        <!-- Campo para digitar o ID do cliente -->
+        <div class="input-container">
+            <label for="client-id">Digite o ID do cliente:</label>
+            <input type="number" id="client-id" placeholder="Ex: 1" min="1">
+            <button onclick="fetchData()">Buscar</button>
+        </div>
+        <!-- Área para exibir os dados do cliente -->
+        <div id="client-details"></div>
+        <h2>Endereço</h2>
+        <div id="client-address"></div>
+        <h2>Categoria</h2>
+        <div id="client-category"></div>
+        <h2>Produtos</h2>
+        <div id="client-products"></div>
+    </div>
+
+    <script>
+        function fetchData() {
+            const clientId = document.getElementById('client-id').value; // Pega o ID digitado pelo usuário
+            if (!clientId) {
+                alert("Por favor, digite um ID válido.");
+                return;
+            }
+
+            const url = `http://localhost:8080/clients/find/${clientId}`; // Monta a URL com o ID
+
+            // Limpa os dados anteriores
+            document.getElementById('client-details').innerHTML = "";
+            document.getElementById('client-address').innerHTML = "";
+            document.getElementById('client-category').innerHTML = "";
+            document.getElementById('client-products').innerHTML = "";
+
+            // Função para buscar os dados do JSON
+            async function fetchClientData() {
+                try {
+                    //chama o endpoint do backend
+                    const response = await fetch(url);
+                    if (!response.ok) {
+                        throw new Error(`Erro na requisição: ${response.status} ${response.statusText}`);
+                    }
+                    //jsonData conterá o Json retornado pelo EndPoint
+                    const jsonData = await response.json();
+                    //chama a função que mostrará os dados do Json
+                    displayData(jsonData);
+                } catch (error) {
+                    console.error("Erro ao buscar os dados:", error);
+                    // Exibe uma mensagem de erro na página
+                    document.getElementById('client-details').innerHTML = `
+                <p class="error">Erro ao carregar os dados.</p>
+                <p class="error">Detalhes: ${error.message}</p>
+            `;
+                }
+            }
+            // Função para exibir os dados na página
+            function displayData(jsonData) {
+                // Exibir informações do usuário
+                const clientDetails = document.getElementById('client-details');
+                //insere os dados do cliente na seção client-details
+                clientDetails.innerHTML = `
+                    <p><strong>Nome:</strong> ${jsonData.name}</p>
+                    <p><strong>CPF:</strong> ${jsonData.cpf}</p>
+                    <p><strong>Renda:</strong> R$ ${jsonData.income.toFixed(2)}</p>
+                    <p><strong>Data de Nascimento:</strong> ${new Date(jsonData.birthDate).toLocaleDateString()}</p>
+                    <p><strong>Número de Filhos:</strong> ${jsonData.children}</p>
+                    `;
+
+                 // Exibir endereço do usuário
+                const clientAddress = document.getElementById('client-address');
+                clientAddress.innerHTML = `
+                    <p><strong>Rua:</strong> ${jsonData.address.street}</p>
+                    <p><strong>Cidade:</strong> ${jsonData.address.city}</p>
+                    <p><strong>Estado:</strong> ${jsonData.address.state}</p>
+                    <p><strong>CEP:</strong> ${jsonData.address.zipCode}</p>
+                    `;
+
+                // Exibir categoria do usuário
+                const clientCategory = document.getElementById('client-category');
+                clientCategory.innerHTML = `
+                    <p><strong>Categoria:</strong> ${jsonData.category.name}</p>
+                    `;
+                
+                // Exibir produtos do usuário
+                const clientProducts = document.getElementById('client-products');
+                jsonData.products.forEach(produto => {
+                    const productInfo = document.createElement('div');
+                    productInfo.innerHTML = `
+                    <p><strong>Nome:</strong> ${produto.name}</p>
+                    <p><strong>Preço:</strong> R$ ${produto.price.toFixed(2)}</p>
+                    <hr>
+                `;
+                    clientProducts.appendChild(productInfo);
+                });
+            }
+
+
+
+            // Iniciar a busca dos dados
+            fetchClientData();
+        }
+    </script>
+</body>
+
+</html>

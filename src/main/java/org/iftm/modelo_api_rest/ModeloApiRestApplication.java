@@ -18,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootApplication
+
 public class ModeloApiRestApplication implements CommandLineRunner {
 
     // --- INJEÇÃO DOS REPOSITORIES (Para testar nossas consultas) ---
